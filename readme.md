@@ -44,6 +44,29 @@ privschool-lms/
 - Firebase account and project
 - OpenAI API key (for LLM service)
 
+### Firebase Setup
+
+This project uses a shared Firebase project for authentication and Firestore database operations across the team. To access the shared Firebase resources:
+
+1. Request access to the team's Firebase project (`privschool-d978c`)
+2. Once you have access, you'll need the service account key:
+   - If you're a team member, get the `serviceAccountKey.json` file from a team lead
+   - Place this file in the `db/` directory
+   - This file is gitignored to prevent credentials from being committed
+
+If you're setting up your own instance of this project:
+1. Create a Firebase project at [https://console.firebase.google.com/](https://console.firebase.google.com/)
+2. Set up Firebase Authentication with Google Sign-In enabled
+3. Create a Firestore database with the same schema
+4. Generate a service account key:
+   - Go to Project Settings > Service accounts
+   - Click "Generate new private key"
+   - Save the JSON file
+5. Copy the downloaded JSON file to `db/serviceAccountKey.json`
+   - Use the structure in `db/serviceAccountKey.example.json` as a reference
+
+The service account key is used by the backend services to interact with Firebase Admin SDK for authentication verification and Firestore operations.
+
 ### Installation
 
 1. Clone the repository
@@ -552,3 +575,60 @@ sys.path.append(str(project_root))
 
 ```typescript
 import { auth, db, googleProvider } from '@privschool-lms/common/lib/firebase';
+```
+
+## Firebase Service Account Setup and Credentials
+
+To use Firebase services, you need to set up a service account and generate credentials. Here's how:
+
+### Step 1: Create a Firebase Project
+
+Create a new Firebase project in the Firebase console.
+
+### Step 2: Enable Firebase Services
+
+Enable the Firebase services you want to use, such as Firebase Authentication and Firestore.
+
+### Step 3: Create a Service Account
+
+Create a new service account in the Firebase console:
+
+1. Go to the Firebase console and select your project.
+2. Click on the "Settings" icon (gear icon) and select "Project settings".
+3. Click on the "Service accounts" tab.
+4. Click on the "Create service account" button.
+5. Enter a name for your service account and select the "Firebase Admin SDK" role.
+6. Click on the "Create" button.
+
+### Step 4: Generate Credentials
+
+Generate credentials for your service account:
+
+1. Go to the Firebase console and select your project.
+2. Click on the "Settings" icon (gear icon) and select "Project settings".
+3. Click on the "Service accounts" tab.
+4. Find your service account and click on the three vertical dots next to it.
+5. Click on the "Create key" button.
+6. Select the "JSON" key type and click on the "Create" button.
+7. Save the generated JSON file securely.
+
+### Step 5: Use Credentials in Your Application
+
+Use the generated credentials in your application:
+
+1. Create a new file named `firebase-service-account.json` in the root of your project.
+2. Copy the contents of the generated JSON file into `firebase-service-account.json`.
+3. Use the `firebase-admin` SDK to initialize the Firebase app with the service account credentials:
+
+```typescript
+import * as admin from 'firebase-admin';
+
+admin.initializeApp({
+  credential: admin.credential.cert('firebase-service-account.json'),
+  databaseURL: 'https://your-project-id.firebaseio.com',
+});
+```
+
+Note: Make sure to replace `your-project-id` with your actual Firebase project ID.
+
+By following these steps, you can set up a Firebase service account and generate credentials to use in your application.

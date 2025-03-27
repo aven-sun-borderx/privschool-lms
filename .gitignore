@@ -23,6 +23,11 @@ out
 .history/
 .turbo/
 
+# Credentials and secrets
+db/serviceAccountKey.json
+**/serviceAccountKey.json
+**/*serviceAccountKey*.json
+
 # Python
 __pycache__/
 *.py[cod]
