@@ -527,6 +527,67 @@ npm run build
 npm run lint
 ```
 
+## Git Workflow and Branching Strategy
+
+To maintain code quality and ensure a smooth development process, we follow a structured Git workflow:
+
+### Branch Structure
+
+- **main**: Production-ready code. This branch should always be stable and deployable.
+- **develop**: Integration branch for features that are ready for testing but not yet released to production.
+- **feature branches**: Individual developer branches for new features or bug fixes (e.g., `aven-sun/new-feature`).
+
+### Development Process
+
+1. **Never push directly to the main branch**. All changes must go through the proper review process.
+
+2. **Create your personal feature branch** from the develop branch:
+   ```bash
+   git checkout develop
+   git pull origin develop
+   git checkout -b your-name/feature-name
+   ```
+
+3. **Make your changes** and commit them to your feature branch:
+   ```bash
+   git add .
+   git commit -m "Descriptive commit message"
+   git push origin your-name/feature-name
+   ```
+
+4. **Create a Pull Request (PR)** from your feature branch to the develop branch.
+   - Add a clear description of the changes
+   - Request reviews from team members
+   - Address any feedback or comments
+
+5. **After PR approval**, merge your changes into the develop branch.
+
+6. **Testing on develop**: Once features are integrated into the develop branch, they should be tested thoroughly.
+
+7. **Release to production**: When the develop branch is stable and ready for release:
+   ```bash
+   git checkout main
+   git merge develop
+   git push origin main
+   ```
+
+### Merging Develop to Main
+
+To merge changes from the develop branch to the main branch:
+
+1. Ensure all tests pass on the develop branch
+2. Create a Pull Request from develop to main
+3. After final review and approval, merge the PR
+4. Tag the release with a version number:
+   ```bash
+   git checkout main
+   git pull origin main
+   git tag -a v1.0.0 -m "Version 1.0.0"
+   git push origin v1.0.0
+   ```
+
+This workflow helps maintain a clean repository history and ensures that only reviewed, tested code makes it to production.
+
 ## Important Notes
 
 1. When adding new shared components or utilities, place them in the appropriate directory under `common/`.
